@@ -25,6 +25,8 @@ describe('HomeComponent', () => {
 
   const beginnerCourses = setupCourses()
     .filter(course => course.category == 'BEGINNER');
+  const advancedCourses = setupCourses()
+    .filter(course => course.category == 'ADVANCED');
 
   beforeEach(async(() => {
     const coursesServiceSpy = jasmine.createSpyObj('CoursesService', ['findAllCourses']);
@@ -52,7 +54,7 @@ describe('HomeComponent', () => {
   });
 
 
-  fit("should display only beginner courses", () => {
+  it("should display only beginner courses", () => {
 
     coursesService.findAllCourses.and.returnValue(of(beginnerCourses));
 
@@ -67,7 +69,13 @@ describe('HomeComponent', () => {
 
   it("should display only advanced courses", () => {
 
-    pending();
+    coursesService.findAllCourses.and.returnValue(of(advancedCourses));
+
+    fixture.detectChanges();
+
+    const tabs = el.queryAll(By.css(".mdc-tab"));
+
+    expect(tabs.length).toBe(1, "Unexpected number of tabs found");
 
   });
 
