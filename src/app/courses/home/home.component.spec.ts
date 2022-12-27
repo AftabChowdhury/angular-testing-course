@@ -52,13 +52,13 @@ describe('HomeComponent', () => {
   });
 
 
-  it("should display only beginner courses", () => {
+  fit("should display only beginner courses", () => {
 
     coursesService.findAllCourses.and.returnValue(of(beginnerCourses));
 
     fixture.detectChanges();
 
-    const tabs = el.queryAll(By.css(".mat-tab-label"));
+    const tabs = el.queryAll(By.css(".mdc-tab"));
 
     expect(tabs.length).toBe(1, "Unexpected number of tabs found");
 
