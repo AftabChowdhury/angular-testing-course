@@ -82,7 +82,13 @@ describe('HomeComponent', () => {
 
   it("should display both tabs", () => {
 
-    pending();
+    coursesService.findAllCourses.and.returnValue(of(setupCourses()));
+
+    fixture.detectChanges();
+
+    const tabs = el.queryAll(By.css(".mdc-tab"));
+
+    expect(tabs.length).toBe(2, "Expected to find 2 tabs");
 
   });
 
