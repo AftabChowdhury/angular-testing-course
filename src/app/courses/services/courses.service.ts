@@ -31,6 +31,10 @@ export class CoursesService {
         return this.http.put<Course>(`/api/courses/${courseId}`, changes);
     }
 
+    addCourse(changes: Partial<Course>): Observable<Course> {
+        return this.http.post<Course>(`/api/courses/`, changes);
+    }
+
     findLessons(
         courseId:number, filter = '', sortOrder = 'asc',
         pageNumber = 0, pageSize = 3):  Observable<Lesson[]> {
