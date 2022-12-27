@@ -21,10 +21,25 @@ describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
   let component:HomeComponent;
   let el: DebugElement;
+  let coursesService: any;
 
   beforeEach((() => {
-
-
+    const coursesServiceSpy = jasmine.createSpyObj('CoursesService', ['findAllCourses']);
+    TestBed.configureTestingModule({
+      imports: [
+          CoursesModule,
+          NoopAnimationsModule
+      ],
+      providers: [
+          {provide: CoursesService, useValue: coursesServiceSpy}
+      ]
+  }).compileComponents()
+      .then(() => {
+          fixture = TestBed.createComponent(HomeComponent);
+          component = fixture.componentInstance;
+          el = fixture.debugElement;
+          coursesService = TestBed.get(CoursesService);
+      });
   }));
 
   it("should create the component", () => {
