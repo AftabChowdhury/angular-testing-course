@@ -1,3 +1,4 @@
+import { Course } from './../model/course';
 import { async, ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { CoursesModule } from '../courses.module';
 import { DebugElement } from '@angular/core';
@@ -27,6 +28,7 @@ describe('HomeComponent', () => {
     .filter(course => course.category == 'BEGINNER');
   const advancedCourses = setupCourses()
     .filter(course => course.category == 'ADVANCED');
+  const allCourses: Course[] = setupCourses();
 
   beforeEach(async(() => {
     const coursesServiceSpy = jasmine.createSpyObj('CoursesService', ['findAllCourses']);
@@ -97,6 +99,18 @@ describe('HomeComponent', () => {
 
     pending();
 
+  });
+
+  it("should filter course by category", () => {
+    component.filterByCategory(of(allCourses), 'BEGINNER').subscribe(courses => {
+      expect(courses.length).toBe(9, "Incorrect course number for BEGINNER");
+    }
+    );
+
+    component.filterByCategory(of(allCourses), 'ADVANCED').subscribe(courses => {
+      expect(courses.length).toBe(3, "Incorrect course number for ADVANCED");
+    }
+    );
   });
 
 });
