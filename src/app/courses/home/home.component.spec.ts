@@ -1,5 +1,5 @@
 import { Course } from './../model/course';
-import { async, ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, flush, waitForAsync, TestBed } from '@angular/core/testing';
 import { CoursesModule } from '../courses.module';
 import { DebugElement } from '@angular/core';
 
@@ -30,7 +30,7 @@ describe('HomeComponent', () => {
     .filter(course => course.category == 'ADVANCED');
   const allCourses: Course[] = setupCourses();
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const coursesServiceSpy = jasmine.createSpyObj('CoursesService', ['findAllCourses']);
     TestBed.configureTestingModule({
       imports: [
@@ -95,7 +95,7 @@ describe('HomeComponent', () => {
   });
 
 
-  fit("should display advanced courses when tab clicked", fakeAsync(() => {
+  it("should display advanced courses when tab clicked - fakeAsync", fakeAsync(() => {
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
 
     fixture.detectChanges();
@@ -109,10 +109,30 @@ describe('HomeComponent', () => {
     flush();
 
     const cardTitles = el.queryAll(By.css('.mat-mdc-tab-body-active .mat-mdc-card-title'));
-    
+
     expect(cardTitles.length).toBeGreaterThan(0, 'No card title found');
 
     expect(cardTitles[0].nativeElement.textContent).toContain('Angular Security Course');
+  }));
+
+  it("should display advanced courses when tab clicked - waitForAsync", waitForAsync(() => {
+    coursesService.findAllCourses.and.returnValue(of(setupCourses()));
+
+    fixture.detectChanges();
+
+    const tabs = el.queryAll(By.css(".mdc-tab"));
+
+    click(tabs[1]);
+
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const cardTitles = el.queryAll(By.css('.mat-mdc-tab-body-active .mat-mdc-card-title'));
+
+      expect(cardTitles.length).toBeGreaterThan(0, "Could not find card titles");
+
+      expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
+    });
   }));
 
   it("should filter course by category", () => {
